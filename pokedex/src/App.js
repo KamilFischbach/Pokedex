@@ -19,7 +19,7 @@ function App() {
           }
         />
         <Route path="/about" element={<div>ABOUT</div>} />
-        <Route path="/Ditto" element={<PokeDetails />} />
+        <Route path="/Ditto" element={<PokeDetails id='132'/>} />
       </Routes>
     </div>
   );

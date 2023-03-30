@@ -1,16 +1,17 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import "./PokeDetails.css";
 
-function PD() {
+function PokeDetails({ id }) {
   const [pokemon, setPokemon] = React.useState([]);
+  const [flavorText, setFlavorText] = React.useState([]);
 
   function getMe() {
-    fetch("https://pokeapi.co/api/v2/pokemon/132")
+    fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setPokemon({
@@ -21,7 +22,16 @@ function PD() {
           defense: data.stats[2].base_stat,
         });
       });
+    fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setFlavorText({
+          first: data.flavor_text_entries[0].flavor_text,
+        });
+      });
   }
+
+  let artworkUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
 
   function handleClick(event) {
     getMe();
@@ -30,98 +40,58 @@ function PD() {
 
   return (
     <Box sx={{ minWidth: 275 }}>
-      <Button onClick={handleClick}>Balls</Button>
-      <Card variant="outlined">
-        <React.Fragment>
-          <CardContent>
-            <Typography
-              sx={{ fontSize: 14 }}
-              color="text.secondary"
-              gutterBottom
-            >
-              {pokemon.type}
-            </Typography>
-            <Typography variant="h5" component="div">
+      <Button onClick={handleClick}>Get Info</Button>
+      <Card className="card">
+        <CardContent className="card-content">
+          <div className="card-header">
+            <Typography className="card-title" variant="h4">
               {pokemon.name}
             </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              HP: {pokemon.hp}
+            <Typography className="card-subtitle" variant="subtitle1">
+              {pokemon.type}
             </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              Attack: {pokemon.attack}
+          </div>
+          <img
+            className="card-artwork"
+            src={artworkUrl}
+            alt={pokemon.name}
+            title={pokemon.name}
+          />
+          <div className="card-stat-list">
+            <div className="card-stat">
+              <Typography className="card-stat-label" variant="subtitle2">
+                HP
+              </Typography>
+              <Typography className="card-stat-value" variant="subtitle2">
+                {pokemon.hp}
+              </Typography>
+            </div>
+            <div className="card-stat">
+              <Typography className="card-stat-label" variant="subtitle2">
+                Attack
+              </Typography>
+              <Typography className="card-stat-value" variant="subtitle2">
+                {pokemon.attack}
+              </Typography>
+            </div>
+            <div className="card-stat">
+              <Typography className="card-stat-label" variant="subtitle2">
+                Defense
+              </Typography>
+              <Typography className="card-stat-value" variant="subtitle2">
+                {pokemon.defense}
+              </Typography>
+            </div>
+          </div>
+          <div className="card-flavor-container">
+            <Typography className="card-flavor-text" variant="subtitle2">
+              {flavorText.first}
             </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              Defense: {pokemon.defense}
-            </Typography>
-            <Typography variant="body2">
-              well meaning and kindly.
-              <br />
-              {'"a benevolent smile"'}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small">Learn More</Button>
-          </CardActions>
-        </React.Fragment>
+          </div>
+        </CardContent>
       </Card>
     </Box>
   );
 }
 
-class PokeDetails extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: "",
-      type: "",
-      hp: 0,
-      attack: 0,
-      defense: 0,
-    };
-    fetch("https://pokeapi.co/api/v2/pokemon/132")
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({
-          name: data.species.names,
-          type: data.types[0].type.name,
-          hp: data.stats[0].base_stat,
-          attack: data.stats[1].base_stat,
-          defense: data.stats[2].base_stat,
-        });
-      });
-  }
-
-  render = () => (
-    <Box sx={{ minWidth: 275 }}>
-      <Card variant="outlined">
-        <React.Fragment>
-          <CardContent>
-            <Typography
-              sx={{ fontSize: 14 }}
-              color="text.secondary"
-              gutterBottom
-            >
-              {this.state.name}
-            </Typography>
-            <Typography variant="h5" component="div">
-              {this.state.name}
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              adjective
-            </Typography>
-            <Typography variant="body2">
-              well meaning and kindly.
-              <br />
-              {'"a benevolent smile"'}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small">Learn More</Button>
-          </CardActions>
-        </React.Fragment>
-      </Card>
-    </Box>
-  );
-}
-
-export default PD;
+export default PokeDetails;
