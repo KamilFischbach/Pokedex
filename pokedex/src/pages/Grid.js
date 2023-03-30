@@ -1,26 +1,56 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import PokeThumb from "./PokeThumb";
+import "./Grid.css";
+import Button from "@mui/material/Button";
 
 function Grid() {
   const [pokemons, setPokemons] = useState([]);
-  let tempPokemons = [];
-  //"https://pokeapi.co/api/v2/pokemon/?limit=20&offset=0";
-  //useEffect(() => {}, []);
+  const [previousPage, setPreviousPage] = useState(null);
+  const [currentPage, setCurrentPage] = useState(
+    `https://pokeapi.co/api/v2/pokemon/?limit=20&offset=0`
+  );
+  const [nextPage, setNextPage] = useState(null);
 
-  function fetchAllPokemons() {
-    fetch(`https://pokeapi.co/api/v2/pokemon/?limit=20&offset=0`)
-      .then((response) => {
-        if (response.ok) return response.json();
-      })
-      .then((ps) => {
-        tempPokemons = [];
-        ps.results.forEach((element) => {
-          fetchSinglePokemon(element.url);
-        });
-        console.log(tempPokemons);
-        setPokemons(tempPokemons);
-      })
-      .catch((err) => console.log(err));
+  useEffect(() => {
+    fetchPoke();
+  }, [currentPage]);
+
+  async function fetchPoke() {
+    const response = await fetch(currentPage);
+    if (response.ok) {
+      const pokemonJsonList = await response.json();
+      let pokemonsPromises = [];
+      pokemonJsonList.results.forEach((element) => {
+        pokemonsPromises.push(getPokemon(element.url));
+      });
+      setPreviousPage(pokemonJsonList.previous);
+      setNextPage(pokemonJsonList.next);
+      console.log(nextPage);
+      console.log(previousPage);
+      const responses = await Promise.all(pokemonsPromises);
+      const promises = responses.map((r) => r.json());
+      const pokemonList = await Promise.all(promises);
+      const pokemonsToBeSaved = [];
+      pokemonList.forEach((pokemon) =>
+        pokemonsToBeSaved.push(setValues(pokemon))
+      );
+      console.log(pokemonsToBeSaved);
+      setPokemons(pokemonsToBeSaved);
+    }
   }
+
+  function getPokemon(url) {
+    return fetch(`${url}`);
+  }
+
+  function handleNext() {
+    console.log("YOO I AM CALLED");
+    setCurrentPage(nextPage);
+  }
+  function handlePrevious() {
+    setCurrentPage(previousPage);
+  }
+
   function setValues(pokemon) {
     return {
       name: pokemon.name,
@@ -30,33 +60,24 @@ function Grid() {
     };
   }
 
-  function fetchSinglePokemon(url) {
-    fetch(`${url}`)
-      .then((response) => {
-        if (response.ok) return response.json();
-      })
-      .then((pokemon) => {
-        const p = setValues(pokemon);
-        tempPokemons.push(p);
-      })
-      .catch((err) => console.log(err));
-  }
-
-  function handleClick() {
-    fetchAllPokemons();
-    console.log(pokemons);
-  }
-
   return (
-    <div className="grid">
-      <button onClick={handleClick}>LOG POKEMONS!</button>
-      <ul>
+    <div>
+      <div>
+        <p className="text font">Welcome to Pokédex!</p>
+      </div>
+      <div className="grid">
         {pokemons.map((p) => (
-          <li key={p.name}>
-            <img src={p.img} alt="hehe" />
-          </li>
+          <PokeThumb key={p.id} pokemon={p} />
         ))}
-      </ul>
+      </div>
+      <div className="buttonContainer">
+        <Button variant="contained" color="error" onClick={handlePrevious}>
+          Previous
+        </Button>
+        <Button variant="contained" color="error" onClick={handleNext}>
+          Next
+        </Button>
+      </div>
     </div>
   );
 }
