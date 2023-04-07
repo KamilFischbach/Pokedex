@@ -1,6 +1,6 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
+import Grid from "./pages/Grid";
 import { Link } from "react-router-dom";
 import PokeDetails from "./pages/PokeDetails";
 
@@ -8,6 +8,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
+        <Route path="/" element={<Grid />} />
         <Route
           path="/"
           element={
