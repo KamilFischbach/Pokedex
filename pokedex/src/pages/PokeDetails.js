@@ -43,7 +43,7 @@ function PokeDetails({ id }) {
   let artworkUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokeId}.png`;
 
   function handleBack() {
-    navigate("/");
+    navigate("/Pokedex");
   }
 
   return (

@@ -17,7 +17,7 @@ function PokeThumb(props) {
 
   function navigateToDetails() {
     console.log("Click works.");
-    navigate(`/pokemon/${props.pokemon.id}`);
+    navigate(`/Pokedex/pokemon/${props.pokemon.id}`);
   }
 
   return (

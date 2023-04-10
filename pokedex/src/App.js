@@ -8,9 +8,9 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Grid />} />
+        <Route path="/Pokedex" element={<Grid />} />
         <Route
-          path="/about"
+          path="/Pokedex/about"
           element={
             <div className="textPoke fontPoke">
               Pokémon(an abbreviation for Pocket Monsters in Japanese) is a
@@ -24,7 +24,7 @@ function App() {
             </div>
           }
         />
-        <Route path="/pokemon/:pokeId" element={<PokeDetails />} />
+        <Route path="/Pokedex/pokemon/:pokeId" element={<PokeDetails />} />
       </Routes>
     </div>
   );

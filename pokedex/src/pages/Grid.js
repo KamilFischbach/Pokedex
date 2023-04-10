@@ -76,7 +76,7 @@ function Grid() {
         >
           Previous
         </Button>
-        <Link className="font" to="/about">
+        <Link className="font" to="/Pokedex/about">
           About pokemons
         </Link>
         <Button
