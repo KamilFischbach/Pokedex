@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import PokeThumb from "./PokeThumb";
 import "./Grid.css";
 import Button from "@mui/material/Button";
+import { Link } from "react-router-dom";
 
 function Grid() {
   const [pokemons, setPokemons] = useState([]);
@@ -25,8 +26,6 @@ function Grid() {
       });
       setPreviousPage(pokemonJsonList.previous);
       setNextPage(pokemonJsonList.next);
-      console.log(nextPage);
-      console.log(previousPage);
       const responses = await Promise.all(pokemonsPromises);
       const promises = responses.map((r) => r.json());
       const pokemonList = await Promise.all(promises);
@@ -34,7 +33,6 @@ function Grid() {
       pokemonList.forEach((pokemon) =>
         pokemonsToBeSaved.push(setValues(pokemon))
       );
-      console.log(pokemonsToBeSaved);
       setPokemons(pokemonsToBeSaved);
     }
   }
@@ -44,7 +42,6 @@ function Grid() {
   }
 
   function handleNext() {
-    console.log("YOO I AM CALLED");
     setCurrentPage(nextPage);
   }
   function handlePrevious() {
@@ -71,10 +68,23 @@ function Grid() {
         ))}
       </div>
       <div className="buttonContainer">
-        <Button variant="contained" color="error" onClick={handlePrevious}>
+        <Button
+          className="font text"
+          variant="contained"
+          color="error"
+          onClick={handlePrevious}
+        >
           Previous
         </Button>
-        <Button variant="contained" color="error" onClick={handleNext}>
+        <Link className="font" to="/Pokedex/about">
+          About pokemons
+        </Link>
+        <Button
+          className="font text"
+          variant="contained"
+          color="error"
+          onClick={handleNext}
+        >
           Next
         </Button>
       </div>

@@ -1,9 +1,10 @@
 import "./PokeThumb.css";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function PokeThumb(props) {
   const [name, setName] = useState(props.pokemon.name);
-
+  const navigate = useNavigate();
   useEffect(() => {
     capitalizeName();
   }, []);
@@ -14,8 +15,13 @@ function PokeThumb(props) {
     setName(capitalName);
   }
 
+  function navigateToDetails() {
+    console.log("Click works.");
+    navigate(`/Pokedex/pokemon/${props.pokemon.id}`);
+  }
+
   return (
-    <div className="card">
+    <div className="cardThumb" onClick={navigateToDetails}>
       <div className="line1">
         <div className="id font">
           <p>#{props.pokemon.id}</p>

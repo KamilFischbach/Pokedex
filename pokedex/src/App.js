@@ -8,19 +8,23 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Grid />} />
+        <Route path="/Pokedex" element={<Grid />} />
         <Route
-          path="/"
+          path="/Pokedex/about"
           element={
-            <div>
-              <p>HOME</p>
-              <Link to="/about">About</Link>
-              <Link to="/Ditto">Ditto</Link>
+            <div className="textPoke fontPoke">
+              Pokémon(an abbreviation for Pocket Monsters in Japanese) is a
+              Japanese media franchise managed by The Pokémon Company, founded
+              by Nintendo, Game Freak, and Creatures. The franchise was created
+              by Satoshi Tajiri in 1996, and is centered around fictional
+              creatures called "Pokémon". In Pokémon, Pokémon Trainers are
+              people who catch, train, care for, and battle with Pokémon. The
+              English slogan for the franchise is "Gotta Catch ‘Em All!". There
+              are currently 1015 Pokémon species.
             </div>
           }
         />
-        <Route path="/about" element={<div>ABOUT</div>} />
-        <Route path="/Ditto" element={<PokeDetails id='132'/>} />
+        <Route path="/Pokedex/pokemon/:pokeId" element={<PokeDetails />} />
       </Routes>
     </div>
   );

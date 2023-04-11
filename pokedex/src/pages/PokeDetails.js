@@ -5,13 +5,22 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import "./PokeDetails.css";
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 function PokeDetails({ id }) {
-  const [pokemon, setPokemon] = React.useState([]);
-  const [flavorText, setFlavorText] = React.useState([]);
+  const [pokemon, setPokemon] = useState([]);
+  const [flavorText, setFlavorText] = useState([]);
+
+  let { pokeId } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getMe();
+  }, []);
 
   function getMe() {
-    fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+    fetch(`https://pokeapi.co/api/v2/pokemon/${pokeId}`)
       .then((response) => response.json())
       .then((data) => {
         setPokemon({
@@ -22,7 +31,7 @@ function PokeDetails({ id }) {
           defense: data.stats[2].base_stat,
         });
       });
-    fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`)
+    fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokeId}`)
       .then((response) => response.json())
       .then((data) => {
         setFlavorText({
@@ -31,16 +40,14 @@ function PokeDetails({ id }) {
       });
   }
 
-  let artworkUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+  let artworkUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokeId}.png`;
 
-  function handleClick(event) {
-    getMe();
-    console.log(pokemon);
+  function handleBack() {
+    navigate("/Pokedex");
   }
 
   return (
     <Box sx={{ minWidth: 275 }}>
-      <Button onClick={handleClick}>Get Info</Button>
       <Card className="card">
         <CardContent className="card-content">
           <div className="card-header">
@@ -57,18 +64,18 @@ function PokeDetails({ id }) {
             alt={pokemon.name}
             title={pokemon.name}
           />
-          <div className="card-stat-list">
+          <div className="card-stat-list ">
             <div className="card-stat">
-              <Typography className="card-stat-label" variant="subtitle2">
-                HP
+              <Typography className="card-stat-label " variant="subtitle2">
+                HP:
               </Typography>
-              <Typography className="card-stat-value" variant="subtitle2">
+              <Typography className="card-stat-value " variant="subtitle2">
                 {pokemon.hp}
               </Typography>
             </div>
             <div className="card-stat">
-              <Typography className="card-stat-label" variant="subtitle2">
-                Attack
+              <Typography className="card-stat-label " variant="subtitle2">
+                Attack:
               </Typography>
               <Typography className="card-stat-value" variant="subtitle2">
                 {pokemon.attack}
@@ -76,7 +83,7 @@ function PokeDetails({ id }) {
             </div>
             <div className="card-stat">
               <Typography className="card-stat-label" variant="subtitle2">
-                Defense
+                Defense:
               </Typography>
               <Typography className="card-stat-value" variant="subtitle2">
                 {pokemon.defense}
@@ -90,6 +97,9 @@ function PokeDetails({ id }) {
           </div>
         </CardContent>
       </Card>
+      <Button variant="contained" color="error" onClick={handleBack}>
+        Back
+      </Button>
     </Box>
   );
 }

@@ -25,6 +25,7 @@
 }
 
 .font {
-    text-shadow: 2px 2px #2b0b0b;
     font-family: 'Pokemon Solid', sans-serif;
+    text-shadow: 2px 2px #2b0b0b;
+    text-decoration: none;
 }
